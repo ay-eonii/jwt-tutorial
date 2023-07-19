@@ -1,5 +1,6 @@
 package me.ayeonii.tutorial.controller;
 
+import lombok.RequiredArgsConstructor;
 import me.ayeonii.tutorial.dto.LoginDto;
 import me.ayeonii.tutorial.dto.TokenDto;
 import me.ayeonii.tutorial.jwt.TokenProvider;
@@ -20,14 +21,10 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class AuthController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
-    public AuthController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-    }
 
     @PostMapping("/authenticate")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {

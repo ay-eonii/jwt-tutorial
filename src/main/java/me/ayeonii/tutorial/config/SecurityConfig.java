@@ -3,7 +3,7 @@ package me.ayeonii.tutorial.config;
 import lombok.RequiredArgsConstructor;
 import me.ayeonii.tutorial.jwt.JwtAccessDeniedHandler;
 import me.ayeonii.tutorial.jwt.JwtAuthenticationEntryPoint;
-import me.ayeonii.tutorial.jwt.JwtSecurityConfig;
+import me.ayeonii.tutorial.jwt.JwtFilter;
 import me.ayeonii.tutorial.jwt.TokenProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +41,7 @@ public class SecurityConfig {
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .csrf(AbstractHttpConfigurer::disable)
 
+                .addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
@@ -61,9 +62,7 @@ public class SecurityConfig {
                 // enable h2-console
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
-
-                .apply(new JwtSecurityConfig(tokenProvider));
+                );
         return http.build();
     }
 }

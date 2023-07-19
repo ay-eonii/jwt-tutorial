@@ -26,7 +26,7 @@ public class UserService {
             throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
-        Authority authority = Authority.builder() // 회원가입 -> USER, sql -> ADMIN
+        Authority authority = Authority.builder()
                 .authorityName("ROLE_USER")
                 .build();
 
@@ -49,7 +49,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserDto getMyUserWithAuthorities() {
         return UserDto.from(
-                SecurityUtil.getCurrentUsername() // SecurityContext에 저장된 username의 정보만 가져옴
+                SecurityUtil.getCurrentUsername()
                         .flatMap(userRepository::findOneWithAuthoritiesByUsername)
                         .orElseThrow(() -> new NotFoundMemberException("Member not found"))
         );

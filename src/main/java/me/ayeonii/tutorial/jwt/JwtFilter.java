@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtFilter extends OncePerRequestFilter { // doFilter Override
+public class JwtFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
 
@@ -25,8 +25,8 @@ public class JwtFilter extends OncePerRequestFilter { // doFilter Override
         String requestURI = request.getRequestURI();
 
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt); //토큰에서 인증정보(Authentication) 받아오기
-            SecurityContextHolder.getContext().setAuthentication(authentication); //인증정보를 SecurityContext에 저장
+            Authentication authentication = tokenProvider.getAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
             log.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
